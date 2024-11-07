@@ -37,16 +37,38 @@ public class DespesasTServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String acao = req.getParameter("acao");  // Get the 'acao' parameter
+        String codigo = req.getParameter("codigo");  // Get the 'codigo' parameter
 
-        List<Despesa> despesaList = null;
-        try {
-            despesaList = dao.getAll();
-            req.setAttribute("despesaList", despesaList);
-            req.getRequestDispatcher("despesas.jsp").forward(req, resp);
+        switch (acao) {
+            case "abrir-form-edicao":
+                // Edit form: fetch despesa by ID
+                int id = Integer.parseInt(codigo);  // Parse 'codigo' (ID) to integer
+                try {
+                    Despesa despesa = dao.getById(id);  // Fetch the despesa by ID
+                    req.setAttribute("despesa", despesa);  // Set the despesa attribute
+                    req.getRequestDispatcher("updateDespesaForm.jsp").forward(req, resp);  // Forward to the update form
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new ServletException("Error fetching despesa for editing: " + e.getMessage());
+                }
+                break;
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+            case "list":
+                // List all despesas
+                List<Despesa> despesaList = null;
+                try {
+                    despesaList = dao.getAll();  // Fetch all despesas
+                    req.setAttribute("despesaList", despesaList);  // Set the list in request
+                    req.getRequestDispatcher("despesas.jsp").forward(req, resp);  // Forward to the list page
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    throw new ServletException("Error fetching despesas: " + e.getMessage());
+                }
+                break;
+
+            default:
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action not recognized");  // Handle unknown actions
         }
-
     }
 }

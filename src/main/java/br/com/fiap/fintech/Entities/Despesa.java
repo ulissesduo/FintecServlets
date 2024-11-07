@@ -11,6 +11,17 @@ public class Despesa {
     private String categoria;
     private int usuario_id; // Foreign key for user
 
+    public Despesa(int id_despesa,String descricao, double valor, Timestamp data_pagamento, char status_pagamento, String categoria, int usuario_id) {
+        this.id_despesa = id_despesa;
+        this.descricao = descricao;
+        this.valor = valor;
+        this.data_pagamento = data_pagamento;
+        this.status_pagamento = status_pagamento;
+        this.categoria = categoria;
+        this.usuario_id = usuario_id;
+    }
+
+
     public Despesa(String descricao, double valor, Timestamp data_pagamento, char status_pagamento, String categoria, int usuario_id) {
         this.descricao = descricao;
         this.valor = valor;
@@ -75,5 +86,17 @@ public class Despesa {
 
     public void setUsuario_id(int usuario_id) {
         this.usuario_id = usuario_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Despesa{" +
+                "descricao='" + descricao + '\'' +
+                ", valor=" + valor +
+                ", data_pagamento=" + data_pagamento +
+                ", status_pagamento=" + status_pagamento +
+                ", categoria='" + categoria + '\'' +
+                ", usuario_id=" + usuario_id +
+                '}';
     }
 }
