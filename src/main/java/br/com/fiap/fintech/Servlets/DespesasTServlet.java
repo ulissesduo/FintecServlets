@@ -38,6 +38,20 @@ public class DespesasTServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String acao = req.getParameter("acao");  // Get the 'acao' parameter
+
+        if (acao == null || acao.equals("list")) {  // Default to list if 'acao' is null or "list"
+            List<Despesa> despesaList = null;
+            try {
+                despesaList = dao.getAll();  // Fetch all despesas
+                req.setAttribute("despesaList", despesaList);  // Set the list in request
+                req.getRequestDispatcher("despesas.jsp").forward(req, resp);  // Forward to the list page
+            } catch (SQLException e) {
+                e.printStackTrace();
+                throw new ServletException("Error fetching despesas: " + e.getMessage());
+            }
+            return;  // Exit the method after listing
+        }
+
         String codigo = req.getParameter("codigo");  // Get the 'codigo' parameter
 
         switch (acao) {
@@ -53,22 +67,20 @@ public class DespesasTServlet extends HttpServlet {
                     throw new ServletException("Error fetching despesa for editing: " + e.getMessage());
                 }
                 break;
-
-            case "list":
-                // List all despesas
-                List<Despesa> despesaList = null;
+            case "deletar": // Delete case
+                // Delete the despesa by ID
+                int idDespesa = Integer.parseInt(codigo);  // Parse 'codigo' (ID) to integer
                 try {
-                    despesaList = dao.getAll();  // Fetch all despesas
-                    req.setAttribute("despesaList", despesaList);  // Set the list in request
-                    req.getRequestDispatcher("despesas.jsp").forward(req, resp);  // Forward to the list page
+                    dao.deleteDespesa(idDespesa);  // Call the delete method from DAO
+                    resp.sendRedirect("insertDespesa?acao=list");
                 } catch (SQLException e) {
                     e.printStackTrace();
-                    throw new ServletException("Error fetching despesas: " + e.getMessage());
+                    throw new ServletException("Error deleting despesa: " + e.getMessage());
                 }
                 break;
-
             default:
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action not recognized");  // Handle unknown actions
         }
     }
+
 }

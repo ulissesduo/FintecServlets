@@ -17,7 +17,8 @@
     Value: <input type="text" name="valor" value="${despesa.valor}" required><br>
     Category: <input type="text" name="categoria" value="${despesa.categoria}" required><br>
     Payment Status: <input type="text" name="statusPagamento" value="${despesa.status_pagamento}" required><br>
-    Payment Date: <input type="text" name="dataPagamento" value="${despesa.data_pagamento}" required><br>
+    Payment Date: <input type="date" name="dataPagamento" value="${despesa.data_pagamento}" required><br>
+
     User ID: <input type="text" name="usuarioId" value="${despesa.usuario_id}" required><br>
 
     <input type="submit" value="Update Expense">

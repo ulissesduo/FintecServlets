@@ -22,6 +22,7 @@
         <th>Category</th>
         <th>User ID</th>
         <th>Edit</th>
+        <th>Delete</th> <!-- New column header for delete button -->
       </tr>
 
       <!-- Iterating over the despesaList -->
@@ -34,14 +35,16 @@
           <td>${despesa.status_pagamento}</td>
           <td>${despesa.categoria}</td>
           <td>${despesa.usuario_id}</td>
-
           <td>
-            <!-- Create the edit link with dynamic parameters -->
-            <c:url value="/insertDespesa" var="link">
-              <c:param name="acao" value="abrir-form-edicao"/>
-              <c:param name="codigo" value="${despesa.id_despesa}"/>
-            </c:url>
-            <a href="${link}">Editar</a>
+            <a href="/insertDespesa?acao=abrir-form-edicao&codigo=${despesa.id_despesa}">Editar</a>
+          </td>
+          <td>
+            <!-- Delete button form -->
+            <form action="/insertDespesa" method="get" onsubmit="return confirm('Are you sure you want to delete this expense?');">
+              <input type="hidden" name="acao" value="deletar" />
+              <input type="hidden" name="codigo" value="${despesa.id_despesa}" />
+              <button type="submit">Delete</button>
+            </form>
           </td>
         </tr>
       </c:forEach>

@@ -46,7 +46,7 @@ public class InvestimentoDAO {
     }
 
     public void updateInvestimento(Investimento investimento) throws SQLException {
-        String sql = "UPDATE investimentos SET tipo_investimento = ?, valor_investido = ?, data_inicio = ?, data_resgate = ? WHERE id = ?";
+        String sql = "UPDATE investimentost SET tipo_investimento = ?, valor_investido = ?, data_inicio = ?, data_resgate = ? WHERE id = ?";
         Connection con = ConnectionFactory.getConnection();
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
