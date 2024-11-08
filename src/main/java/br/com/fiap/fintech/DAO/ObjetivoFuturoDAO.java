@@ -50,39 +50,33 @@ public class ObjetivoFuturoDAO {
     }
 
     public ObjetivoFuturo getById(Long idObjetivo) throws SQLException {
-        ObjetivoFuturo objFuturo = null;
-        String sql = "SELECT * FROM objetivos_futurosT WHERE id_objFut = ?";
-        Connection con = ConnectionFactory.getConnection();
-        PreparedStatement stmt = null;
-        ObjetivoFuturo objFut = null;
-        try {
-            stmt = con.prepareStatement(sql);
-            stmt.setLong(1, idObjetivo);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Long id = rs.getLong("idObjetivo");
-                String descricao = rs.getString("descricao");
-                int qtdAlvo = rs.getInt("quantidadeAlvo");
-                double valorAtual = rs.getDouble("valorAtual");
-                String tipo = rs.getString("tipo");
-                int usuarioIdUsuario = rs.getInt("usuario_id_usuario");
+        String sql = "SELECT * FROM objetivos_futurosT WHERE id_objetivo = ?";
+        ObjetivoFuturo objFut = null;  // Start with null to indicate no result found
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
 
-                objFut = new ObjetivoFuturo(idObjetivo,descricao,qtdAlvo,valorAtual,tipo,usuarioIdUsuario);
+            stmt.setLong(1, idObjetivo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Make sure the column names match exactly what is in the database
+                    Long id = rs.getLong("id_objetivo");  // Ensure this matches the actual column name
+                    String descricao = rs.getString("descricao");
+                    int qtdAlvo = rs.getInt("quantidade_alvo");  // Ensure this matches the actual column name
+                    double valorAtual = rs.getDouble("valor_atual");  // Ensure this matches the actual column name
+                    String tipo = rs.getString("tipo");
+                    int usuarioIdUsuario = rs.getInt("usuario_id_usuario");
+
+                    // Create the ObjetivoFuturo object with the retrieved data
+                    objFut = new ObjetivoFuturo(id, descricao, qtdAlvo, valorAtual, tipo, usuarioIdUsuario);
+                }
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
+            throw e;  // Optionally rethrow the exception if you want it to propagate
         }
-        finally {
-            try{
-                stmt.close();
-                //fechar conexao banco
-            }
-            catch(SQLException e){
-                e.printStackTrace();
-            }
-        }
-        return objFut;
+
+        return objFut;  // Return the ObjetivoFuturo object, or null if not found
     }
 
 
@@ -97,6 +91,28 @@ public class ObjetivoFuturoDAO {
             statement.setInt(5, objFut.getUsuarioIdUsuario());
             statement.setLong(6, objFut.getUsuarioIdUsuario());  // Assuming you have an 'id' method in ObjetivoFuturo
             statement.executeUpdate();
+        }
+    }
+    public void deleteObjetivoFuturo(int idObjetivoFuturo) throws SQLException {
+        String sql = "DELETE FROM objetivos_futurosT WHERE id_objetivo = ?";
+        PreparedStatement stmt = null;
+        try {
+            Connection con = ConnectionFactory.getConnection();
+            stmt = con.prepareStatement(sql);
+            stmt.setInt(1, idObjetivoFuturo);  // Set the objetivo futuro ID to delete
+            stmt.executeUpdate();  // Execute the delete operation
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;  // Optionally rethrow the exception if you want it to propagate
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();  // Close the PreparedStatement
+                }
+                // Close the connection if needed
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
