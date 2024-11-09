@@ -36,6 +36,10 @@ public class Investimento {
         this.dataResgate = dataResgate;
         this.usuarioId = usuarioId;
     }
+
+    public Investimento(String descricao, double valorInvestido, String dataInicio, String dataResgate, int tipoInvestimentoId) {
+    }
+
     public String getTipoDescricao() {
         return tipoDescricao;
     }

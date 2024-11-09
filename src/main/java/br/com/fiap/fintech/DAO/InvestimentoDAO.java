@@ -59,7 +59,7 @@ public class InvestimentoDAO {
 
     // Get a single Investimento by ID
     public Investimento getById(Long id) throws SQLException {
-        String sql = "SELECT * FROM INVESTIMENTOST WHERE ID = ?";
+        String sql = "SELECT * FROM INVESTIMENTOST WHERE id_investimento = ?";
         Connection con = ConnectionFactory.getConnection();
 
         Investimento investimento = null;
@@ -68,7 +68,7 @@ public class InvestimentoDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     investimento = new Investimento();
-                    investimento.setIdInvestimento(rs.getLong("ID"));
+                    investimento.setIdInvestimento(rs.getLong("ID_INVESTIMENTO"));
                     investimento.setTipoInvestimento(rs.getLong("TIPO_INVESTIMENTO"));
                     investimento.setValorInvestido(rs.getDouble("VALOR_INVESTIDO"));
                     investimento.setDataInicio(rs.getTimestamp("DATA_INICIO"));
@@ -108,24 +108,32 @@ public class InvestimentoDAO {
             stmt.executeUpdate();
         }
     }
-
-
     public void updateInvestimento(Investimento investimento) throws SQLException {
-        String sql = "UPDATE investimentosT SET tipo_investimento = ?, valor_investido = ?, data_inicio = ?, data_resgate = ? WHERE id = ?";
-        Connection con = ConnectionFactory.getConnection();
+        // SQL query to update investment record
+        String sql = "UPDATE investimentosT SET tipo_investimento = ?, valor_investido = ?, data_inicio = ?, data_resgate = ?, USUARIO_ID = ? WHERE id_investimento = ?";
 
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setLong(1, investimento.getTipoInvestimento());
-            stmt.setDouble(2, investimento.getValorInvestido());
-            stmt.setTimestamp(3, investimento.getDataInicio());
-            stmt.setTimestamp(4, investimento.getDataResgate());
-            stmt.setLong(5, investimento.getUsuarioId()); // Use the investment ID for the WHERE clause
+        // Open a connection to the database
+        try (Connection con = ConnectionFactory.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+
+            // Set the parameters for the query
+            stmt.setLong(1, investimento.getTipoInvestimento());  // Assuming 'TipoInvestimento' is a Long
+            stmt.setDouble(2, investimento.getValorInvestido());   // Assuming 'valorInvestido' is a Double
+            stmt.setTimestamp(3, investimento.getDataInicio());    // Assuming 'dataInicio' is a Timestamp
+            stmt.setTimestamp(4, investimento.getDataResgate());   // Assuming 'dataResgate' is a Timestamp
+            stmt.setLong(5, investimento.getUsuarioId());          // Assuming 'usuarioId' is a Long
+
+            // Use the 'id_investimento' to uniquely identify the record to update
+            stmt.setLong(6, investimento.getIdInvestimento());     // Assuming 'idInvestimento' is a Long
+
+            // Execute the update statement
             stmt.executeUpdate();
         }
     }
 
+
     public void deleteInvestimento(int id) throws SQLException {
-        String sql = "DELETE FROM investimentosT WHERE id = ?";
+        String sql = "DELETE FROM investimentosT WHERE id_investimento = ?";
         PreparedStatement stmt = null;
         try {
             Connection con = ConnectionFactory.getConnection();

@@ -17,7 +17,9 @@ public class DespesasTServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private DespesaDAO dao = new DespesaDAO();
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idParam = request.getParameter("id_descricao");
         String descricao = request.getParameter("descricao");
         double valor = Double.parseDouble(request.getParameter("valor"));
         String categoria = request.getParameter("categoria");
@@ -25,13 +27,46 @@ public class DespesasTServlet extends HttpServlet {
         int usuarioId = Integer.parseInt(request.getParameter("usuarioId"));
         String dataPagamentoStr = request.getParameter("dataPagamento");
         Timestamp dataPagamento = Timestamp.valueOf(dataPagamentoStr + " 00:00:00");
+
         try {
-            Despesa despesa = new Despesa(descricao,valor,dataPagamento,statusPagamento,categoria,usuarioId);
-            dao.save(despesa);
+            Despesa despesa = new Despesa(descricao, valor, dataPagamento, statusPagamento, categoria, usuarioId);
+
+            if (idParam == null || idParam.isEmpty()) {
+                // Insert if idParam is null or empty
+                dao.save(despesa);
+            } else {
+                // Update if idParam exists
+                int id = Integer.parseInt(idParam);
+                despesa.setId_despesa(id); // Assuming setId method exists in Despesa entity
+                dao.update(despesa);
+            }
             response.sendRedirect("success.jsp");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new ServletException("Error inserting despesa: " + e.getMessage());
+            throw new ServletException("Error saving/updating despesa: " + e.getMessage());
+        }
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String idParam = request.getParameter("id_despesa");
+        String descricao = request.getParameter("descricao");
+        double valor = Double.parseDouble(request.getParameter("valor"));
+        String categoria = request.getParameter("categoria");
+        char statusPagamento = request.getParameter("statusPagamento").charAt(0);
+        int usuarioId = Integer.parseInt(request.getParameter("usuarioId"));
+        String dataPagamentoStr = request.getParameter("dataPagamento");
+        Timestamp dataPagamento = Timestamp.valueOf(dataPagamentoStr + " 00:00:00");
+
+        try {
+            int id = Integer.parseInt(idParam); // Parse the ID parameter
+            Despesa despesa = new Despesa(descricao, valor, dataPagamento, statusPagamento, categoria, usuarioId);
+            despesa.setId_despesa(id); // Set the ID for the update operation
+            dao.update(despesa); // Call the DAO update method
+            response.sendRedirect("success.jsp");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServletException("Error updating despesa: " + e.getMessage());
         }
     }
 

@@ -73,7 +73,19 @@
                             <p class="mb-0">Data Início: ${investimento.dataInicio}</p>
                             <p class="mb-0">Data Resgate: ${investimento.dataResgate}</p>
                         </div>
+
                         <div class="col-4 text-end">
+                            <a href="/investimentos?acao=abrir-form-edicao&codigo=${investimento.idInvestimento}">Editar</a>
+
+                            <td>
+                                <!-- Delete button form -->
+                                <form action="/investimentos" method="get" onsubmit="return confirm('Are you sure you want to delete this goal?');">
+                                    <input type="hidden" name="acao" value="deletar" />
+                                    <input type="hidden" name="codigo" value="${investimento.idInvestimento}" />
+                                    <button type="submit" class="btn btn-danger btn-sm fa fa-trash"> Delete</button>
+                                </form>
+                            </td>
+
                         </div>
                     </div>
                 </c:forEach>
@@ -84,7 +96,6 @@
         </c:otherwise>
     </c:choose>
 </div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C89scichPD02hX1v7vAxqF08+LT7DcnB6BspAsl9KMnqGWgDkCMq9A9F9DNCQ65" crossorigin="anonymous"></script>
 </body>
