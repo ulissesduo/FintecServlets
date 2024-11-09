@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class Investimento {
     private Long idInvestimento;
     private Long tipoInvestimento;
+    private String tipoDescricao;  // New attribute for investment type description
     private Double valorInvestido;
     private Timestamp dataInicio;
     private Timestamp dataResgate;
@@ -13,13 +14,34 @@ public class Investimento {
     public Investimento() {
     }
 
-    public Investimento(Long idInvestimento, Long tipoInvestimento, Double valorInvestido, Timestamp dataInicio, Timestamp dataResgate, Long usuarioId) {
+    // Constructor with all attributes, including description
+    public Investimento(Long idInvestimento, Long tipoInvestimento, String description, double valorInvestido,
+                        Timestamp dataInicio, Timestamp dataResgate, Long usuarioId) {
         this.idInvestimento = idInvestimento;
         this.tipoInvestimento = tipoInvestimento;
+        this.tipoDescricao = description;
         this.valorInvestido = valorInvestido;
         this.dataInicio = dataInicio;
         this.dataResgate = dataResgate;
         this.usuarioId = usuarioId;
+    }
+
+    // Constructor without ID, suitable for new investments
+    public Investimento(Long tipoInvestimento, String description, double valorInvestido,
+                        Timestamp dataInicio, Timestamp dataResgate, Long usuarioId) {
+        this.tipoInvestimento = tipoInvestimento;
+        this.tipoDescricao = description;
+        this.valorInvestido = valorInvestido;
+        this.dataInicio = dataInicio;
+        this.dataResgate = dataResgate;
+        this.usuarioId = usuarioId;
+    }
+    public String getTipoDescricao() {
+        return tipoDescricao;
+    }
+
+    public void setTipoDescricao(String tipoDescricao) {
+        this.tipoDescricao = tipoDescricao;
     }
 
     public Long getIdInvestimento() {

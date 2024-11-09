@@ -12,61 +12,84 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
+
 @WebServlet("/investimentos")
 public class InvestimentoServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
     private InvestimentoDAO investimentoDAO;
-    private TipoInvestimentoDAO tipoInvestimentoDAO;
 
-    @Override
-    public void init() throws ServletException {
-        try {
-            Connection connection = ConnectionFactory.getConnection();
-            investimentoDAO = new InvestimentoDAO();
-            tipoInvestimentoDAO = new TipoInvestimentoDAO(connection);
-        } catch (SQLException e) {
-            throw new ServletException("Database connection failed", e);
-        }
+    public void init() {
+        investimentoDAO = new InvestimentoDAO();  // Initialize DAO
     }
 
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    // Handle GET for listing investments
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        List<Investimento> investimentos = null;
         try {
-            List<Investimento> investimentos = investimentoDAO.getAllInvestimentos();
-            List<TipoInvestimento> tiposInvestimento = tipoInvestimentoDAO.getAllTiposInvestimento();
-            req.setAttribute("investimentos", investimentos);
-            req.setAttribute("tiposInvestimento", tiposInvestimento);
-            req.getRequestDispatcher("investimentos-listagem.jsp").forward(req, resp);
+            investimentos = investimentoDAO.getAllInvestimentos();  // Fetch all investments
         } catch (SQLException e) {
-            throw new ServletException(e);
+            throw new ServletException("Error fetching investments", e);
         }
+        request.setAttribute("investimentos", investimentos);  // Set the list of investments in request
+        request.getRequestDispatcher("/listInvestimentos.jsp").forward(request, response);  // Forward to the list page
     }
+
+//    // Handle POST for inserting new investment
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        // Retrieve form data for new investment
+//        Long tipoInvestimento = Long.valueOf(request.getParameter("tipoInvestimento"));
+//        double valorInvestido = Double.parseDouble(request.getParameter("valorInvestido"));
+//
+//        String dataIniciostr = request.getParameter("dataInicio");
+//        java.sql.Timestamp dataInicio = java.sql.Timestamp.valueOf(dataIniciostr + " 00:00:00");
+//
+//        String dataResgatestr = request.getParameter("dataResgate");
+//        java.sql.Timestamp dataResgate = java.sql.Timestamp.valueOf(dataResgatestr + " 00:00:00");
+//
+//        Long usuarioId = Long.parseLong(request.getParameter("usuarioId"));
+//
+//        Investimento investimento = new Investimento(tipoInvestimento, valorInvestido, dataInicio, dataResgate, usuarioId);
+//        try {
+//            investimentoDAO.addInvestimento(investimento);  // Add the new investment to the database
+//        } catch (SQLException e) {
+//            throw new ServletException("Error inserting investment", e);
+//        }
+//        response.sendRedirect("investimentos");  // Redirect to the list of investments after insertion
+//    }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            Long tipoInvestimento = Long.valueOf(req.getParameter("tipoInvestimento"));
-            Double valorInvestido = Double.valueOf(req.getParameter("valorInvestido"));
-            Timestamp dataInicio = Timestamp.valueOf(req.getParameter("dataInicio"));
-            Timestamp dataResgate = Timestamp.valueOf(req.getParameter("dataResgate"));
-            Long usuarioId = Long.valueOf(req.getParameter("usuarioId"));
+            // Retrieve form data
+            Long tipoInvestimento = Long.parseLong(req.getParameter("tipoInvestimento"));
+            String tipoDescricao = req.getParameter("tipoDescricao"); // Assuming this field in form as hidden/input
+            double valorInvestido = Double.parseDouble(req.getParameter("valor"));
+            Timestamp dataInicio = Timestamp.valueOf(req.getParameter("dataInicio") + " 00:00:00");
+            Timestamp dataResgate = Timestamp.valueOf(req.getParameter("dataResgate") + " 00:00:00");
+            Long usuarioId = Long.parseLong(req.getParameter("usuarioId"));
 
-            Investimento investimento = new Investimento();
-            investimento.setTipoInvestimento(tipoInvestimento);
-            investimento.setValorInvestido(valorInvestido);
-            investimento.setDataInicio(dataInicio);
-            investimento.setDataResgate(dataResgate);
-            investimento.setUsuarioId(usuarioId);
+            // Create the Investimento object
+            Investimento investimento = new Investimento(null, tipoInvestimento, tipoDescricao, valorInvestido, dataInicio, dataResgate, usuarioId);
 
+            // Call DAO to add investment
             investimentoDAO.addInvestimento(investimento);
-            resp.sendRedirect(req.getContextPath() + "/investimentos");
+
+            // Provide feedback to the user
+            PrintWriter writer = resp.getWriter();
+            writer.println("<html><body>Investment added successfully!</body></html>");
         } catch (SQLException e) {
-            throw new ServletException(e);
+            e.printStackTrace();
+            resp.getWriter().println("<html><body>Error: Could not save investment. " + e.getMessage() + "</body></html>");
         }
     }
 }

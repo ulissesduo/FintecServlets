@@ -17,6 +17,8 @@
         <th>Data Inicio</th>
         <th>Data Resgate</th>
         <th>Usuario ID</th>
+        <th>Edit</th> <!-- New column for Edit button -->
+        <th>Update</th> <!-- New column for Update button -->
     </tr>
     </thead>
     <tbody>
@@ -28,11 +30,29 @@
             <td>${investimento.dataInicio}</td>
             <td>${investimento.dataResgate}</td>
             <td>${investimento.usuarioId}</td>
+
+            <!-- Edit button -->
+            <td>
+                <form action="${pageContext.request.contextPath}/investimentos" method="get">
+                    <input type="hidden" name="acao" value="editar">
+                    <input type="hidden" name="idInvestimento" value="${investimento.idInvestimento}">
+                    <button type="submit">Edit</button>
+                </form>
+            </td>
+
+            <!-- Update button -->
+            <td>
+                <form action="${pageContext.request.contextPath}/investimentos" method="post">
+                    <input type="hidden" name="acao" value="update">
+                    <input type="hidden" name="idInvestimento" value="${investimento.idInvestimento}">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
         </tr>
     </c:forEach>
     <c:if test="${empty investimentos}">
         <tr>
-            <td colspan="6">No investments found.</td>
+            <td colspan="8">No investments found.</td>
         </tr>
     </c:if>
     </tbody>
@@ -40,9 +60,6 @@
 
 <h2>Adicionar Investimento</h2>
 <form action="${pageContext.request.contextPath}/investimentos" method="post">
-<%--    <label for="tipoInvestimento">Investment Type:</label>--%>
-<%--    <input type="number" id="tipoInvestimento" name="tipoInvestimento" required><br>--%>
-
     <jsp:include page="dropdown.jsp" /><br>
 
     <label for="valorInvestido">Amount Invested:</label>

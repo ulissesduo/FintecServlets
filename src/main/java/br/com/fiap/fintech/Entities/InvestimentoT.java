@@ -3,7 +3,7 @@ package br.com.fiap.fintech.Entities;
 import java.sql.Timestamp;
 
 public class InvestimentoT {
-    private Integer idInvestimento;
+    private int idInvestimento;
     private Integer investmentTypeId;
     private Double valorInvestido;
     private Timestamp dataInicio;
