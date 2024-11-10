@@ -23,7 +23,7 @@ public class HelloServlet extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        // Initialize database connection
+
         try (Connection connection = ConnectionFactory.getConnection()) {
             String sql = "SELECT * FROM despesas WHERE usuario_id_usuario = 2";
             PreparedStatement stmt = connection.prepareStatement(sql);
