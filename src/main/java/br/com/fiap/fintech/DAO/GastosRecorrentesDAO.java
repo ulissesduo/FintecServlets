@@ -26,12 +26,7 @@ public class GastosRecorrentesDAO {
                 String recurringNote = rs.getString("recurringNote");
                 int isCanceled = rs.getInt("isCanceled"); //change it to bool
                 String frequency = rs.getString("frequency");
-//                private Timestamp endDate;
-//                private Timestamp nextPaymentDate;
-//                private Integer autoPay;
-//                private String recurringNote;
-//                private Integer isCanceled;
-//                private String frequencia;
+
             }
         }
         catch(SQLException e){

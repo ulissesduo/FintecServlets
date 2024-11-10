@@ -37,10 +37,12 @@
               </li>
             </div>
           </div>
+
           <c:if test="${not empty user}">
-            <span class="navbar-text me-2">${user}</span>
+            <a href="updateUser.jsp"><span class="navbar-text me-2"> Meu perfil: ${user}</span></a>
             <a href="login" class="btn btn-outline-primary">Sair</a>
           </c:if>
+
         </div>
       </div>
       <div class="col-12 d-md-none mobile p-3 mb-2 text-white rounded-bottom-4">
@@ -60,6 +62,7 @@
   <c:if test="${not empty user}">
     <h5>Seu login foi efetuado com sucesso!</h5>
   </c:if>
+
 </div>
 
 <script src="resources/js/bootstrap.bundle.js"></script>

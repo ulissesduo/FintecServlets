@@ -1,6 +1,5 @@
 package br.com.fiap.fintech.DAO;
 
-import br.com.fiap.fintech.Entities.InvestmentFIAP;
 import br.com.fiap.fintech.Entities.TipoInvestimento;
 import br.com.fiap.fintech.Factory.ConnectionFactory;
 

@@ -7,13 +7,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static br.com.fiap.fintech.Factory.ConnectionFactory.closeConnection;
+
 public class DespesaDAO {
 
     public void save (Despesa despesa) throws SQLException {
-
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement statement = null;
         String sql = "INSERT INTO despesasT (descricao, valor, data_pagamento, status_pagamento, categoria, usuario_id) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection con = ConnectionFactory.getConnection()){
-            PreparedStatement statement = con.prepareStatement(sql);
+        try {
+            statement = con.prepareStatement(sql);
             statement.setString(1, despesa.getDescricao());
             statement.setDouble(2, despesa.getValor());
             statement.setTimestamp(3, despesa.getData_pagamento());
@@ -24,16 +27,20 @@ public class DespesaDAO {
         }
         catch(Exception e){
             throw new SQLException(e.getMessage());
+        } finally {
+            if (statement != null) statement.close();
+            closeConnection(con);
         }
     }
 
     public List<Despesa> getAll() throws SQLException{
         List<Despesa> listDespesa = new ArrayList<>();
         String sql = "SELECT * FROM despesasT";
-        Connection con = ConnectionFactory.getConnection();
+        Connection con = null;
+        PreparedStatement stmt = null;
         try{
-            PreparedStatement stmt = con.prepareStatement(sql);
-
+            con = ConnectionFactory.getConnection();
+            stmt = con.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while(rs.next()){
 
@@ -52,6 +59,10 @@ public class DespesaDAO {
         catch(SQLException e){
             e.printStackTrace();
         }
+        finally {
+            if (stmt != null) stmt.close();
+            closeConnection(con);
+        }
         return listDespesa;
     }
 
@@ -69,7 +80,6 @@ public class DespesaDAO {
                 String desc = rs.getString("descricao");
                 double valor = rs.getDouble("valor");
 
-                //fix the format of the date
                 Timestamp data_pagamento = rs.getTimestamp("data_pagamento");
 
                 char status_pagamento = rs.getString("status_pagamento").charAt(0);
@@ -83,21 +93,17 @@ public class DespesaDAO {
             e.printStackTrace();
         }
         finally {
-            try{
-                stmt.close();
-                //fechar conexao banco
-            }
-            catch(SQLException e){
-                e.printStackTrace();
-            }
+            if (stmt != null) stmt.close();
+            closeConnection(con);
         }
         return despesa;
     }
 
     public void update (Despesa despesa) throws SQLException {
         PreparedStatement statement = null;
+        Connection con =null;
         try{
-            Connection con = ConnectionFactory.getConnection();
+            con = ConnectionFactory.getConnection();
             String sql = "UPDATE despesasT SET descricao = ?, valor = ?, data_pagamento = ?, status_pagamento = ?, categoria = ? WHERE id_despesa = ?";
             statement = con.prepareStatement(sql);
             statement.setString(1, despesa.getDescricao());
@@ -113,13 +119,8 @@ public class DespesaDAO {
             e.printStackTrace();
         }
         finally {
-            try{
-                statement.close();
-                //fechar conexao banco
-            }
-            catch(SQLException e){
-                e.printStackTrace();
-            }
+            if (statement != null) statement.close();
+            closeConnection(con);
         }
     }
 
@@ -127,21 +128,17 @@ public class DespesaDAO {
     public void deleteDespesa(int idDespesa) throws SQLException {
         String sql = "DELETE FROM despesasT WHERE id_despesa = ?";
         PreparedStatement stmt = null;
+        Connection con = null;
         try {
-            Connection con = ConnectionFactory.getConnection();
+            con = ConnectionFactory.getConnection();
             stmt = con.prepareStatement(sql);
-            stmt.setInt(1, idDespesa);  // Set the despesa ID to delete
-            stmt.executeUpdate();  // Execute the delete operation
+            stmt.setInt(1, idDespesa);
+            stmt.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
         }finally {
-            try{
-                stmt.close();
-                //fechar conexao banco
-            }
-            catch(SQLException e){
-                e.printStackTrace();
-            }
+            if (stmt != null) stmt.close();
+            closeConnection(con);
         }
     }
 

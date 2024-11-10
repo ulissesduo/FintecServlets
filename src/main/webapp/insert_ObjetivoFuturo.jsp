@@ -58,7 +58,7 @@
 </nav>
 
 <div class="container mt-5 form-container">
-    <h2>Insert Objetivo Futuro</h2>
+    <h2>Adicionar Objetivo Futuro</h2>
     <form action="insertObjetivoFuturo" method="post" class="bg-dark p-4 rounded">
         <div class="mb-3">
             <label for="descricao" class="form-label text-white">Descrição:</label>
@@ -84,7 +84,7 @@
 
         <div class="text-center">
             <button type="submit" class="btn btn-primary">
-                <i class="fa fa-plus"></i> Insert Objetivo Futuro
+                <i class="fa fa-plus"></i> Adicionar Objetivo Futuro
             </button>
         </div>
     </form>

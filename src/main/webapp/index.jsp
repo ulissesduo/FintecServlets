@@ -54,16 +54,20 @@
 
         <div class="mb-3">
             <label for="email" class="form-label text-light">E-mail</label>
-            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            <input type="email" class="form-control" id="email" name="email" placeholder="Insira seu E-mail" required>
         </div>
 
         <div class="mb-3">
             <label for="password" class="form-label text-light">Password</label>
-            <input type="password" class="form-control" id="password" name="senha" placeholder="Enter your password" required>
+            <input type="password" class="form-control" id="password" name="senha" placeholder="Insira sua senha" required>
         </div>
+
 
         <div class="d-grid">
             <button type="submit" class="btn btn-outline-light">Login</button>
+        </div>
+        <div>
+            <a href="Register.jsp">Cadastre-se aqui</a>
         </div>
     </form>
 </div>

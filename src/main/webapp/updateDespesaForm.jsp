@@ -1,67 +1,49 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="br.com.fiap.fintech.Entities.Despesa" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Edit Expense</title>
+    <meta charset="UTF-8">
+    <title>Update Despesa</title>
 </head>
 <body>
+<h2>Update Despesa</h2>
+<form action="updateDespesa" method="post">
+    <!-- Hidden field to hold the despesa ID -->
+    <input type="hidden" name="id_despesa" value="${despesa.id_despesa}">
 
-<nav>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-none col-md-block d-flex flex-column desktop">
-                <div class="navbar navbar-expand-lg navbar-dark bg-dark nav-top-menu">
-                    <a class="navbar-brand" href="home.jsp">Home</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <div class="navbar-nav">
-                            <li class="nav-item">
-                                <a href="investimentos" class="nav-link">investimentos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="insertDespesa" class="nav-link">Despesa</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="insertObjetivoFuturo" class="nav-link">Objetivos</a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="insertDespesa" class="nav-link">Gastos</a>
-                            </li>
-                        </div>
-                    </div>
-                    <c:if test="${not empty user}">
-                        <span class="navbar-text me-2">${user}</span>
-                        <a href="login" class="btn btn-outline-primary">Sair</a>
-                    </c:if>
-                </div>
-            </div>
-            <div class="col-12 d-md-none mobile p-3 mb-2 text-white rounded-bottom-4">
-                <h3 class="d-flex justify-content-center">Investimentos</h3>
-            </div>
+    <!-- Descricao field -->
+    <label for="descricao">Descrição:</label>
+    <input type="text" id="descricao" name="descricao" value="${despesa.descricao}" required>
+    <br>
 
-        </div>
-    </div>
-</nav>
-<h2>Edit Expense</h2>
+    <!-- Valor field -->
+    <label for="valor">Valor:</label>
+    <input type="number" step="0.01" id="valor" name="valor" value="${despesa.valor}" required>
+    <br>
 
-<!-- Form to update a despesa -->
-<form action="/insertDespesa" method="POST">
-    <input type="hidden" name="id_despesa" value="${despesa.id_despesa}" />
 
-    Description: <input type="text" name="descricao" value="${despesa.descricao}" required><br>
-    Value: <input type="text" name="valor" value="${despesa.valor}" required><br>
-    Category: <input type="text" name="categoria" value="${despesa.categoria}" required><br>
-    Payment Status: <input type="text" name="statusPagamento" value="${despesa.status_pagamento}" required><br>
-    Payment Date: <input type="date" name="dataPagamento" value="${despesa.data_pagamento}" required><br>
 
-    User ID: <input type="text" name="usuarioId" value="${despesa.usuario_id}" required><br>
+    <label for="dataPagamento" class="form-label">Data de Pagamento:</label>
+    <input type="date" class="form-control" id="dataPagamento" name="dataPagamento" required>
 
-    <input type="submit" value="Update Expense">
+    <!-- Status Pagamento field -->
+    <label for="status_pagamento">Status Pagamento (P/U):</label>
+    <input type="text" id="status_pagamento" name="status_pagamento" value="${despesa.status_pagamento}" required maxlength="1">
+    <br>
+
+    <!-- Categoria field -->
+    <label for="categoria">Categoria:</label>
+    <input type="text" id="categoria" name="categoria" value="${despesa.categoria}" required>
+    <br>
+
+    <!-- Usuario ID field -->
+    <label for="usuario_id">Usuário ID:</label>
+    <input type="number" id="usuario_id" name="usuario_id" value="${despesa.usuario_id}" required>
+    <br>
+
+    <!-- Submit button -->
+    <button type="submit">Update</button>
 </form>
-
 </body>
 </html>
