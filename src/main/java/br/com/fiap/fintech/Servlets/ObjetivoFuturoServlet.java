@@ -23,7 +23,6 @@ public class ObjetivoFuturoServlet extends HttpServlet {
         String acao = req.getParameter("acao"); // Get the 'acao' parameter to determine what to do
 
         if (acao == null || acao.equals("list")) {
-            // List all Objetivos Futuros
             List<ObjetivoFuturo> objFuturo = null;
             try {
                 objFuturo = objetivoFuturoDAO.getAll(); // Fetch all Objetivos Futuros
@@ -38,7 +37,6 @@ public class ObjetivoFuturoServlet extends HttpServlet {
 
             switch (acao) {
                 case "abrir-form-edicao":
-                    // Edit form: Fetch ObjetivoFuturo by ID
                     Long id = Long.parseLong(codigo);
                     try {
                         ObjetivoFuturo objetivoFuturo = objetivoFuturoDAO.getById(id); // Get the specific ObjetivoFuturo by ID
@@ -51,7 +49,6 @@ public class ObjetivoFuturoServlet extends HttpServlet {
                     break;
 
                 case "deletar":
-                    // Delete case: Delete ObjetivoFuturo by ID
                     int idDespesa = Integer.parseInt(codigo);
                     try {
                         objetivoFuturoDAO.deleteObjetivoFuturo(idDespesa); // Call the delete method from the DAO
@@ -71,21 +68,17 @@ public class ObjetivoFuturoServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            // Extract the parameters from the form
             String descricao = req.getParameter("descricao");
             int quantidadeAlvo = Integer.parseInt(req.getParameter("quantidadeAlvo"));
             double valorAtual = Double.parseDouble(req.getParameter("valorAtual"));
             String tipo = req.getParameter("tipo");
             int usuarioIdUsuario = Integer.parseInt(req.getParameter("usuarioIdUsuario"));
 
-            // Create a new ObjetivoFuturo object
             ObjetivoFuturo objetivoFuturo = new ObjetivoFuturo(descricao, quantidadeAlvo, valorAtual, tipo, usuarioIdUsuario);
 
-            // Save it using the DAO
             objetivoFuturoDAO.save(objetivoFuturo);
 
-            // Redirect to success page
-            resp.sendRedirect("success.jsp");
+            doGet(req,resp);
         } catch (SQLException | NumberFormatException e) {
             e.printStackTrace();
             req.setAttribute("errorMessage", "Error inserting objetivo futuro: " + e.getMessage());

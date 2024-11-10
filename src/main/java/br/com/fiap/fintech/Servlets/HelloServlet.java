@@ -32,7 +32,7 @@ public class HelloServlet extends HttpServlet {
             // Begin the HTML response with a Bootstrap CSS link
             out.println("<html><head><link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'></head><body>");
             out.println("<div class='container'>");
-            out.println("<h1 class='my-4'>Despesas List</h1>");
+            out.println("<h1 class='my-4'>Despesas List hello servlet</h1>");
             out.println("<div class='row'>"); // Start row for cards
 
             // Loop through the result set and print each row as a card

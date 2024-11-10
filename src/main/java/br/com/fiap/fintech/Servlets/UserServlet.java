@@ -1,7 +1,6 @@
 package br.com.fiap.fintech.Servlets;
 
 import br.com.fiap.fintech.DAO.USerDAO;
-import br.com.fiap.fintech.DAO.USerDAO;
 import br.com.fiap.fintech.Entities.User;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -30,7 +29,7 @@ public class UserServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        List<User> userList = userDAO.selectAllUsers();// Assume userService fetches the user list
+        List<User> userList = userDAO.selectAllUsers();
         request.setAttribute("listUser", userList);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user-list.jsp");
         dispatcher.forward(request, response);

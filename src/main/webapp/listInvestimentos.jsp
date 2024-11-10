@@ -57,7 +57,7 @@
     <!-- Redirect button -->
     <div class="text-end mb-3">
         <a href="insert_Investimento.jsp" class="btn btn-primary">
-            <i class="fa fa-plus"></i> Add New Investment
+            <i class="fa fa-plus"></i> Adicionar Investmento
         </a>
     </div>
     <c:choose>
@@ -75,11 +75,11 @@
                         </div>
 
                         <div class="col-4 text-end">
-                            <a href="/investimentos?acao=abrir-form-edicao&codigo=${investimento.idInvestimento}">Editar</a>
+                            <a href="/investimentos?acao=abrir-form-edicao&codigo=${investimento.idInvestimento}" class="btn btn-secondary">Editar</a>
 
                             <td>
                                 <!-- Delete button form -->
-                                <form action="/investimentos" method="get" onsubmit="return confirm('Are you sure you want to delete this goal?');">
+                                <form action="/investimentos" method="get" onsubmit="return confirm('Tem certeza que quer deletar este registro?');">
                                     <input type="hidden" name="acao" value="deletar" />
                                     <input type="hidden" name="codigo" value="${investimento.idInvestimento}" />
                                     <button type="submit" class="btn btn-danger btn-sm fa fa-trash"> Delete</button>

@@ -40,7 +40,8 @@ public class DespesasTServlet extends HttpServlet {
                 despesa.setId_despesa(id); // Assuming setId method exists in Despesa entity
                 dao.update(despesa);
             }
-            response.sendRedirect("success.jsp");
+
+            doGet(request, response);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServletException("Error saving/updating despesa: " + e.getMessage());

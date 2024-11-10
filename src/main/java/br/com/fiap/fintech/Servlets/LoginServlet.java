@@ -59,7 +59,7 @@ public class LoginServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         session.invalidate();
-        request.getRequestDispatcher("home.jsp").forward(request, response);
+        request.getRequestDispatcher("/").forward(request, response);
 
     }
 }

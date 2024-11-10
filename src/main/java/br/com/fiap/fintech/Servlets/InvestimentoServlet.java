@@ -84,7 +84,6 @@ public class InvestimentoServlet extends HttpServlet {
             Timestamp dataResgate = Timestamp.valueOf(req.getParameter("dataResgate") + " 00:00:00");
             Long usuarioId = Long.parseLong(req.getParameter("usuarioId"));
 
-
             // Create the Investimento object
             Investimento investimento = new Investimento(null, tipoInvestimento, tipoDescricao, valorInvestido, dataInicio, dataResgate, usuarioId);
 
@@ -95,8 +94,7 @@ public class InvestimentoServlet extends HttpServlet {
                 investimentoDAO.updateInvestimento(investimento);  // Update
             }
 
-            // Redirect to success page
-            resp.sendRedirect("success.jsp");
+            doGet(req, resp);
 
         } catch (SQLException | IllegalArgumentException e) {
             e.printStackTrace();
